@@ -36,23 +36,8 @@ class SweaRatesAPI:
             time.sleep(self.min_interval - elapsed)
         self._last_request = time.monotonic()
 
-    def get_series(self) -> list[str]:
+    def _request_with_retry(self, url: str, retry=True) -> dict:
         self._respect_rate_limit()
-        logger.info(f"Request sent to {self.SERIES_URL}")
-        r = requests.get(self.SERIES_URL)
-        r.raise_for_status()
-        self.series_json = r.json()
-
-        series_ids = [
-            item[self.SERIES_ID_KEY]
-            for item in self.series_json
-            if self.SERIES_ID_KEY in item
-        ]
-        return series_ids[: self.batch] if self.batch else series_ids
-
-    def _get_rate(self, series_id: str, retry: bool = True):
-        self._respect_rate_limit()
-        url = f"{self.RAW_RATES_URL}{series_id}"
         logger.info(f"Request sent to {url}")
         r = requests.get(url)
         if r.status_code == 429:
@@ -61,19 +46,29 @@ class SweaRatesAPI:
             time.sleep(wait)
             if retry:
                 logger.info(f"Retrying to request {url}")
-                return self._get_rate(series_id, retry=False)
+                return self._request_with_retry(url, retry=False)
         r.raise_for_status()
+        return r.json()
+
+    def get_series(self):
+        self.series_json = self._request_with_retry(self.SERIES_URL)
+        series_ids = [
+            item[self.SERIES_ID_KEY]
+            for item in self.series_json
+            if self.SERIES_ID_KEY in item
+        ]
+        return series_ids[: self.batch] if self.batch else series_ids
+
+    def get_rate(self, series_id: str):
+        url = f"{self.RAW_RATES_URL}{series_id}"
         data = {"series_id": series_id}
-        data.update(r.json())
+        data.update(self._request_with_retry(url))
         if self.insert_data:
             Rate.create(**data)
         return data
 
     def get_latest_rates(self, series_ids: list[str]):
-        results = []
-        for sid in series_ids:
-            results.append(self._get_rate(sid))
-        return results
+        return [self.get_rate(sid) for sid in series_ids]
 
     def request_data(self):
         series_ids = self.get_series()

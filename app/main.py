@@ -1,7 +1,7 @@
 from app.scheduler.tasks import test_request
 
 
-def main(requests_per_minute, batch, insert_data):
+def main(requests_per_minute=60, batch=3, insert_data=True):
     """
     Run this script to test the API and DB on a small batch.
 
@@ -18,4 +18,4 @@ def main(requests_per_minute, batch, insert_data):
 
 
 if __name__ == "__main__":
-    main(requests_per_minute=60, batch=3, insert_data=True)
+    main()
