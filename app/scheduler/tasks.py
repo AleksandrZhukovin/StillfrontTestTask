@@ -37,7 +37,7 @@ def test_request(requests_per_minute=60, batch=3, insert_data=True):
                 f"created_at (UTC)={r.created_at}"
             )
 
-    print_last_rates("Rates BEFORE API request")
+    print_last_rates("Last 5 rates BEFORE API request")
 
     api = SweaRatesAPI(
         requests_per_minute=requests_per_minute, batch=batch, insert_data=insert_data
@@ -45,4 +45,5 @@ def test_request(requests_per_minute=60, batch=3, insert_data=True):
     data = api.request_data()
     print(f"\nRequested {len(data)} items")
 
-    print_last_rates("Rates AFTER API request")
+    print_last_rates("Last 5 rates AFTER API request")
+    return data
