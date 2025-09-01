@@ -29,6 +29,10 @@ ENV/
 env.bak/
 venv.bak/
 
+# Logs
+logs/
+*.log
+
 # IDE specific files
 .idea/
 .vscode/
