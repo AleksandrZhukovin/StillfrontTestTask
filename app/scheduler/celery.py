@@ -12,7 +12,7 @@ celery.autodiscover_tasks(["app.scheduler.tasks"])
 celery.conf.beat_schedule = {
     "request-and-store-rates-data": {
         "task": "app.scheduler.tasks.request_and_store_rates_data",
-        "schedule": crontab(minute="*/1"),
+        "schedule": crontab(hour=13),
     },
 }
 
