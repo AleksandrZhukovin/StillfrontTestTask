@@ -6,7 +6,7 @@ services:
   worker:
     build: .
     container_name: stillfront_worker
-    command: celery -A app.tasks worker --loglevel=info
+    command: celery -A app.scheduler.celery worker --loglevel=info
     volumes:
       - .:/app
     env_file:
@@ -17,7 +17,7 @@ services:
   beat:
     build: .
     container_name: stillfront_beat
-    command: celery -A app.tasks beat --loglevel=info
+    command: celery -A app.scheduler.celery beat --loglevel=info
     volumes:
       - .:/app
     env_file:
