@@ -31,6 +31,7 @@ If you have tool mentioned above, do the following steps:
 - Run Redis server depending on your OS
 - Run `poetry run celery -A app.scheduler.celery worker --loglevel=info` to start Celery worker
 - Run `poetry run celery -A app.scheduler.celery beat --loglevel=info` to start Celery beat
+
 *Notice, that worker and beat must be run in different terminals.*
 
 # Debug Instructions
