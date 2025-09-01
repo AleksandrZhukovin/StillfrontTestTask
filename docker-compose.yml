@@ -6,7 +6,11 @@ services:
   worker:
     build: .
     container_name: stillfront_worker
-    command: celery -A app.scheduler.celery worker --loglevel=info
+    command: >
+      sh -c "
+        alembic upgrade head &&
+        celery -A app.scheduler.celery worker --loglevel=info
+      "
     volumes:
       - .:/app
     env_file:
@@ -17,7 +21,11 @@ services:
   beat:
     build: .
     container_name: stillfront_beat
-    command: celery -A app.scheduler.celery beat --loglevel=info
+    command: >
+      sh -c "
+        alembic upgrade head &&
+        celery -A app.scheduler.celery beat --loglevel=info
+      "
     volumes:
       - .:/app
     env_file:
