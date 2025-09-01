@@ -25,12 +25,13 @@ To run the app you will need Python of [*3.10.8*](https://www.python.org/downloa
 Or you can run test script without Redis and Celery, to do so go to [Debug Instructions](#debug-instructions) section.
 If you have tool mentioned above, do the following steps:
 - Create ***.env*** file in project root and specify it according to ***.env.example***, or copy ***.env.default***
-- Run `poetry install` to create venv and install all the dependencies
-- Run `poetry shell` to enter shell in the project's venv
-- Run `alembic upgrade head` to run DB migrations
+- Run `poetry install --no-root` to create venv and install all the dependencies
+- Run `poetry env activate` to activate venv
+- Run `poetry run alembic upgrade head` to run DB migrations
 - Run Redis server depending on your OS
-- Run `celery -A app.scheduler.celery worker --loglevel=info` to start Celery worker
-- Run `celery -A app.scheduler.celery beat --loglevel=info` to start Celery beat
+- Run `poetry run celery -A app.scheduler.celery worker --loglevel=info` to start Celery worker
+- Run `poetry run celery -A app.scheduler.celery beat --loglevel=info` to start Celery beat
+*Notice, that worker and beat must be run in different terminals.*
 
 # Debug Instructions
 There is a way to manually run task to request small amount of data and insert in into the DB without Celery and Redis.
