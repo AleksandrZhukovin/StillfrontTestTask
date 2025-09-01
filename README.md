@@ -35,7 +35,7 @@ If you have tool mentioned above, do the following steps:
 
 # Debug Instructions
 There is a way to manually run task to request small amount of data and insert in into the DB without Celery and Redis.
-There is a file ***app/main.py*** which does so. You can just run it with `python app/main.py` or customize params inside
+There is a file ***app/main.py*** which does so. You can just run it with `poetry run python -m app.main` or customize params inside
 to change the work of API.
 
 # How It Works
